@@ -4,3 +4,10 @@ for more information:
 $ ./xenBackup -h
 
 Read more about this utility on the blog here: http://www.johnandcailin.com/blog/john/backing-your-xen-domains
+
+Fork adds sudo to the script.
+This way a specific user with the nesesairy Sudo rights obnly can perfom this script
+
+Needed text in /etc/sudoers.d/backupuser_rights
+backup_user ALL=(root) NOPASSWD: /home/export/gitrepo/xenBackup/xenBackup,/usr/sbin/xm,/sbin/lvcreate,/sbin/lvremove
+
