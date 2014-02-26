@@ -37,9 +37,9 @@ backupEngine=rdiff-backup                # the default backup engine
 rsyncExe=/usr/bin/rsync                  # rsync executable
 rdiffbackupExe=/usr/bin/rdiff-backup     # rdiff-backup executable
 tarExe=/usr/bin/tar                      # tar executable
-xmExe=sudo /usr/sbin/xm                       # xm executable
-lvcreateExe=sudo /sbin/lvcreate               # lvcreate executable
-lvremoveExe=sudo /sbin/lvremove               # lvremove executable
+xmExe="sudo /usr/sbin/xm"                       # xm executable
+lvcreateExe="sudo /sbin/lvcreate"               # lvcreate executable
+lvremoveExe="sudo /sbin/lvremove"               # lvremove executable
 purgeAge="null"                          # age at which to purge increments
 globalBackupResult=0                     # success status of overall job
 
