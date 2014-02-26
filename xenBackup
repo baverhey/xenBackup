@@ -37,9 +37,9 @@ backupEngine=rdiff-backup                # the default backup engine
 rsyncExe=/usr/bin/rsync                  # rsync executable
 rdiffbackupExe=/usr/bin/rdiff-backup     # rdiff-backup executable
 tarExe=/usr/bin/tar                      # tar executable
-xmExe="sudo /usr/sbin/xm"                       # xm executable
-lvcreateExe="sudo /sbin/lvcreate"               # lvcreate executable
-lvremoveExe="sudo /sbin/lvremove"               # lvremove executable
+xmExe=/usr/sbin/xm                       # xm executable
+lvcreateExe=/sbin/lvcreate               # lvcreate executable
+lvremoveExe=/sbin/lvremove               # lvremove executable
 purgeAge="null"                          # age at which to purge increments
 globalBackupResult=0                     # success status of overall job
 
@@ -124,15 +124,15 @@ logWarning="logger -t ${loggerTag} ${loggerArgs} -p ${loggerFacility}.warning"
 logDebug="logger -t ${loggerTag} ${loggerArgs} -p ${loggerFacility}.debug"
 
 # make sure only root can run our script
-test $(id -u) = 0 || { ${logCritical} "This script must be run as root"; exit 1; }
+sudo test $(id -u) = 0 || { ${logCritical} "This script must be run as root"; exit 1; }
 
 # make sure that the guest manager is available
-test -x ${xmExe} || { ${logCritical} "xen guest manager (${xmExe}) not found"; exit 1; }
+sudo test -x ${xmExe} || { ${logCritical} "xen guest manager (${xmExe}) not found"; exit 1; }
 
 # assemble the list of domains to backup
 if test ${allDomains} = "true"
 then
-   domainList=`${xmExe} list | cut -f1 -d" " | egrep -v "Name|Domain-0"`
+   domainList=`sudo ${xmExe} list | cut -f1 -d" " | egrep -v "Name|Domain-0"`
 else
    # make sure we've got some domains specified
    if test "${domains}" = "null"
@@ -239,7 +239,7 @@ do
    if test ${shutdownDomains} = "true"
    then
       ${logDebug} "shutting down domain ${domain}"
-      ${xmExe} shutdown -w ${domain} > /dev/null
+      sudo ${xmExe} shutdown -w ${domain} > /dev/null
    fi
 
    # unmount mount point if already mounted
@@ -251,7 +251,7 @@ do
    
    # snapshot the disk
    ${logDebug} "Making a snapshot of ${xenDisk}"
-   ${lvcreateExe} -s -L 5G -n ${xenDisk}-snap ${xenDisk} || { ${logCritical} "snapshot failed, does LV (${xenDisk}) exist?"; exit 1; }
+   sudo ${lvcreateExe} -s -L 5G -n ${xenDisk}-snap ${xenDisk} || { ${logCritical} "snapshot failed, does LV (${xenDisk}) exist?"; exit 1; }
 
    # restart the domain
    if test ${shutdownDomains} = "true"
