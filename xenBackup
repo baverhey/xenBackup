@@ -72,10 +72,11 @@ produce a tarfile, an exact mirror of the disk area or a mirror with incremental
    -d      backup only the specified DOMAINs (comma seperated list)
    -t      target LOCATION for the backup e.g. /tmp or root@www.example.com:/tmp
            (not used for tar engine)
-   -a      backup all domains
+   -a      backup all domains (of 1 volume group only)
    -s      shutdown domains before backup (and restart them afterwards)
    -q      run in quiet mode, output still goes to syslog
    -e      backup ENGINE to use, either tar, rsync or rdiff-backup
+   -g      disk areu volume group in case of different volume groups, eg:/dev/vg_kaketoe
    -p      purge increments older than TIME_SPEC. this option only applies
            to rdiff-backup, e.g. 3W for 3 weeks. see "man rdiff-backup" for
            more information
@@ -91,6 +92,10 @@ Example 2
 Example 3
    Backup domains "domainOne" and "domainTwo" using rdiff-backup purging old increments older than 5 days
    $ xenBackup -e rdiff-backup -d "domainOne, domainTwo" -p 5D
+   
+Example 4
+   Backup domains "domainOne" and "domainTwo" using tar on the smae specific volume group
+   $ xenBackup -e tar -d "domainOne, domainTwo" -g /dev/vg_kaketoe_bulk
 
 EOT
 
@@ -98,7 +103,7 @@ EOT
 }
 
 # parse the command line arguments
-while getopts p:e:qsad:t:h o
+while getopts p:e:g:qsad:t:h o
 do     case "$o" in
         q)     quiet="true";;
         s)     shutdownDomains="true";;
@@ -106,6 +111,7 @@ do     case "$o" in
         d)     domains="$OPTARG";;
         t)     targetLocation="$OPTARG";;
         e)     backupEngine="$OPTARG";;
+        g)     xenDiskArea="$OPTARG";;
         p)     purgeAge="$OPTARG";;
         h)     usageAndBail;;
         [?])   usageAndBail
