@@ -9,5 +9,5 @@ Fork adds sudo to the script.
 This way a specific user with the nesesairy Sudo rights obnly can perfom this script
 
 Needed text in /etc/sudoers.d/backupuser_rights
-backup_user ALL=(root) NOPASSWD: /home/export/gitrepo/xenBackup/xenBackup,/usr/sbin/xm,/sbin/lvcreate,/sbin/lvremove
+backup_user ALL=(root) NOPASSWD: /home/export/gitrepo/xenBackup/xenBackup,/usr/sbin/xm,/sbin/lvcreate,/sbin/lvremove,/usr/bin/test
 
